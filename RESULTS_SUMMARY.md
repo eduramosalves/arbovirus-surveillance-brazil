@@ -151,7 +151,7 @@ Per-state breakdowns (in `outputs/glm_negbin_per_state.csv`) show 15/27 states w
 
 ## 8. Output files
 
-### Generated artefacts (35 in `outputs/`, 8 in `figures/`)
+### Generated artefacts (35 in `outputs/`, 11 in `figures/`)
 
 **Statistical tables**
 
@@ -172,7 +172,9 @@ Per-state breakdowns (in `outputs/glm_negbin_per_state.csv`) show 15/27 states w
 - `geo_01`–`geo_06` — geospatial maps
 - `Dengue_*`, `Chikungunya_*`, `Zika_*` — GraphPad-converted clinical/demographic plots
 
-**Composite figures** (`figures/Figure1–8.png`) — publication-ready panels.
+**Composite figures** (`figures/Figure*.png`, 11 files) — publication-ready panels.
+Figure 6 (maps) is split into four standalone figures: `Figure6a_choropleth_mean`,
+`Figure6b_jenks_classification`, `Figure6c_temporal_maps`, `Figure6d_lisa_trend`.
 
 ---
 

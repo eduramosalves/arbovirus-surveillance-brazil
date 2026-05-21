@@ -57,7 +57,7 @@ normalized_results/
 | 5 | `glm_poisson.py` | Poisson GLM (pooled FE, per-state, lagged) |
 | 6 | `glm_quasi_poisson.py` | Quasi-Poisson GLM |
 | 7 | `glm_negbin.py` | Negative Binomial GLM (preferred model — see writeup) |
-| 8 | `merge_figures.py` | `figures/Figure1`–`Figure8` composites |
+| 8 | `merge_figures.py` | 11 `figures/` composites (`Figure1`–`Figure8`; Figure 6 split into `Figure6a`–`Figure6d`) |
 
 ---
 

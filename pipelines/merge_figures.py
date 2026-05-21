@@ -7,7 +7,8 @@ Figure 2 — Trend analysis (Mann-Kendall + Sen's slope)
 Figure 3 — Climate-disease correlations (Spearman)
 Figure 4 — Spatial autocorrelation (Moran scatterplot)
 Figure 5 — Patient demographics (age + sex, all three diseases)
-Figure 6 — Maps (choropleth mean, Jenks, temporal, LISA, trend)
+Figure 6 — Maps, split into four standalone figures:
+            6a choropleth mean · 6b Jenks · 6c temporal · 6d LISA + trend
 """
 
 import os
@@ -157,11 +158,11 @@ for col, (d, img) in enumerate(zip(diseases, imgs_sex)):
 save(fig, "Figure5_demographics.png")
 
 # ==============================================================================
-# Figure 6: Maps
-#   Row A (full width) : geo_01_choropleth_mean      (3-panel, ratio 1.86)
-#   Row B (full width) : py_09_map_jenks              (3-panel, ratio 2.45)
-#   Row C (3 cols)     : geo_02 / geo_03 / geo_04    (temporal per disease)
-#   Row D (2 cols)     : geo_05_lisa / geo_06_trend
+# Figure 6: Maps — split into four standalone figures
+#   Figure 6a : geo_01_choropleth_mean       (choropleth mean)
+#   Figure 6b : py_09_map_jenks              (Jenks classification)
+#   Figure 6c : geo_02 / geo_03 / geo_04     (temporal maps, one per disease)
+#   Figure 6d : geo_05_lisa | geo_06_trend   (LISA clusters + trend map)
 # ==============================================================================
 img_choro   = load(os.path.join(OUT_DIR, "geo_01_choropleth_mean.png"))
 img_jenks   = load(os.path.join(OUT_DIR, "py_09_map_jenks.png"))
@@ -171,36 +172,41 @@ img_tz      = load(os.path.join(OUT_DIR, "geo_04_temporal_zikv.png"))
 img_lisa    = load(os.path.join(OUT_DIR, "geo_05_lisa_clusters.png"))
 img_trend   = load(os.path.join(OUT_DIR, "geo_06_trend_map.png"))
 
-# pixel heights of each row (used for height_ratios)
-h_choro  = img_choro.shape[0]   # 1205
-h_jenks  = img_jenks.shape[0]   # 1217
-h_temp   = img_td.shape[0]      # 1496  (all three temporal maps same height)
-h_bottom = img_lisa.shape[0]    # 1112  (LISA and trend same height)
 
-fw = 18
-fig = plt.figure(figsize=(fw, fw * (h_choro + h_jenks + h_temp + h_bottom) / img_jenks.shape[1]))
+def ratio(img):  # width / height of an image
+    return img.shape[1] / img.shape[0]
 
-# 6-column grid lets rows C and D split cleanly (thirds vs halves)
-gs = gridspec.GridSpec(4, 6, figure=fig,
-                       hspace=0.04, wspace=0.02,
-                       height_ratios=[h_choro, h_jenks, h_temp, h_bottom])
 
-# Row A — choropleth mean (full width)
-place(fig.add_subplot(gs[0, :]), img_choro, label="A")
+# Figure 6a — choropleth mean (single panel, no panel label)
+fw = 16
+fig = plt.figure(figsize=(fw, fw / ratio(img_choro)))
+place(fig.add_subplot(111), img_choro)
+save(fig, "Figure6a_choropleth_mean.png")
 
-# Row B — Jenks classification (full width)
-place(fig.add_subplot(gs[1, :]), img_jenks, label="B")
+# Figure 6b — Jenks classification (single panel, no panel label)
+fw = 16
+fig = plt.figure(figsize=(fw, fw / ratio(img_jenks)))
+place(fig.add_subplot(111), img_jenks)
+save(fig, "Figure6b_jenks_classification.png")
 
-# Row C — temporal maps (3 equal columns, each spans 2 of 6 grid cols)
-place(fig.add_subplot(gs[2, 0:2]), img_td, label="C")
-place(fig.add_subplot(gs[2, 2:4]), img_tc)
-place(fig.add_subplot(gs[2, 4:6]), img_tz)
+# Figure 6c — temporal maps, three diseases side by side (no panel label)
+fw   = 18
+cell = fw / 3
+fig  = plt.figure(figsize=(fw, cell / ratio(img_td) + 0.3))
+gs   = gridspec.GridSpec(1, 3, figure=fig, wspace=0.03)
+place(fig.add_subplot(gs[0, 0]), img_td)
+place(fig.add_subplot(gs[0, 1]), img_tc)
+place(fig.add_subplot(gs[0, 2]), img_tz)
+save(fig, "Figure6c_temporal_maps.png")
 
-# Row D — LISA clusters + trend map (each spans 3 of 6 grid cols)
-place(fig.add_subplot(gs[3, 0:3]), img_lisa,  label="D")
-place(fig.add_subplot(gs[3, 3:6]), img_trend, label="E")
-
-save(fig, "Figure6_maps.png")
+# Figure 6d — LISA clusters + trend map side by side (panels A and B)
+fw   = 18
+cell = fw / 2
+fig  = plt.figure(figsize=(fw, cell / ratio(img_lisa) + 0.3))
+gs   = gridspec.GridSpec(1, 2, figure=fig, wspace=0.03)
+place(fig.add_subplot(gs[0, 0]), img_lisa,  label="A")
+place(fig.add_subplot(gs[0, 1]), img_trend, label="B")
+save(fig, "Figure6d_lisa_trend.png")
 
 # ==============================================================================
 # Figure 7: Dengue — Diagnostic & Clinical Characteristics (2 x 2)
