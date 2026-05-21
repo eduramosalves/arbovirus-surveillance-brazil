@@ -92,7 +92,8 @@ def fig1_pooled_climate_irr():
         ax.set_xticklabels(VIRUS_ORDER)
         ax.set_ylabel("Incidence Rate Ratio (IRR)")
         ax.set_title(title)
-        ax.legend(frameon=False, loc="best")
+    # single shared legend on the left panel (families are identical in both)
+    axes[0].legend(frameon=False, loc="best")
     fig.suptitle("Pooled GLM with state fixed effects — climate IRRs (95% CI; * p<0.05)",
                  fontsize=12, fontweight="bold")
     fig.tight_layout()
