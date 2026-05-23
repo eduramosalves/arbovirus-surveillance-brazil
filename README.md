@@ -35,9 +35,11 @@ normalized_results/
 │   ├── glm_quasi_poisson.py
 │   ├── glm_negbin.py
 │   ├── plot_glm_results.py
-│   └── merge_figures.py
+│   ├── merge_figures.py
+│   └── alt_results.py           # Regenerates the 5 alternative-view figures
 ├── outputs/                     # Generated tables (xlsx/csv) + plots (png)
-├── figures/                     # Composite publication figures
+├── figures/                     # Composite publication figures + 5 alt views
+├── alt_results/                 # Index/README for the alternative figures
 ├── RESULTS_SUMMARY.md           # Full results writeup
 └── RESULTS_SUMMARY.html
 ```
@@ -58,6 +60,14 @@ normalized_results/
 | 6 | `glm_quasi_poisson.py` | Quasi-Poisson GLM |
 | 7 | `glm_negbin.py` | Negative Binomial GLM (preferred model — see writeup) |
 | 8 | `merge_figures.py` | 11 `figures/` composites (`Figure1`–`Figure8`; Figure 6 split into `Figure6a`–`Figure6d`) |
+
+`pipelines/alt_results.py` is a separate, standalone regenerator for the
+five alternative-view figures in `figures/` (`trend01_slope_first_last`,
+`trend03_sen_dotbar`, `spat01_choropleth_facet`, `spat02_lisa_facet`,
+`glm02_caterpillar_temp_irr`). It is not part of `run_all.py` — run it
+on demand with `python pipelines/alt_results.py`. See
+[`alt_results/README.md`](alt_results/README.md) for what each alternative
+replaces.
 
 ---
 
