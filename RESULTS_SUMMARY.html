@@ -394,6 +394,7 @@ code{background:var(--code);padding:1px 6px;border-radius:4px;font-size:13px;col
   <h2><span class="num">10</span> Figure gallery</h2>
   <div class="tabs">
     <div class="tab on" data-tab="fg-pub">Publication figures</div>
+    <div class="tab" data-tab="fg-alt">Alternative views</div>
     <div class="tab" data-tab="fg-glm">GLM</div>
     <div class="tab" data-tab="fg-py">Stats pipeline</div>
     <div class="tab" data-tab="fg-geo">Geospatial</div>
@@ -401,6 +402,7 @@ code{background:var(--code);padding:1px 6px;border-radius:4px;font-size:13px;col
   </div>
 
   <div class="tabpanel on" id="fg-pub"><div class="figures" id="gal-pub"></div></div>
+  <div class="tabpanel" id="fg-alt"><div class="figures" id="gal-alt"></div></div>
   <div class="tabpanel" id="fg-glm"><div class="figures" id="gal-glm"></div></div>
   <div class="tabpanel" id="fg-py"><div class="figures" id="gal-py"></div></div>
   <div class="tabpanel" id="fg-geo"><div class="figures" id="gal-geo"></div></div>
@@ -539,6 +541,13 @@ const galleries = {
     ['figures/Figure6d_lisa_trend.png','Figure 6d — LISA clusters + trend map'],
     ['figures/Figure7_dengue_clinical.png','Figure 7 — Dengue clinical'],
     ['figures/Figure8_chikv_zika_clinical.png','Figure 8 — CHIKV/ZIKV clinical'],
+  ],
+  'gal-alt':[
+    ['figures/trend01_slope_first_last.png','Trend 1 — Slope chart (first vs last year)'],
+    ['figures/trend03_sen_dotbar.png','Trend 3 — Sen-slope dot-and-bar'],
+    ['figures/spat01_choropleth_facet.png','Spatial 1 — Choropleth small-multiples'],
+    ['figures/spat02_lisa_facet.png','Spatial 2 — LISA categories faceted'],
+    ['figures/glm02_caterpillar_temp_irr.png','GLM 02 — Per-state Temp IRR caterpillar'],
   ],
   'gal-glm':[
     ['figures/glm_fig1_pooled_climate_irr.png','GLM 1 — Pooled climate IRR'],

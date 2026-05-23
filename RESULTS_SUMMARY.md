@@ -59,6 +59,10 @@ Confidence intervals on the mean of monthly counts and incidence (pooled across 
 
 The majority of states show no significant trend, consistent with the high inter-annual epidemic volatility typical of arboviruses.
 
+![Slope chart — first vs last year per state, MK-significant states highlighted](figures/trend01_slope_first_last.png)
+
+![Mann-Kendall Sen slopes per state, sorted dot-and-bar](figures/trend03_sen_dotbar.png)
+
 ---
 
 ## 4. Climate correlations — Spearman (lags 0–2 months)
@@ -96,6 +100,10 @@ Centro-Oeste + Sudeste/Sul axis — Distrito Federal, Espírito Santo, Goiás, M
 **Chikungunya:** no significant local clusters — disease is spatially diffuse.
 
 **Zika:** isolated HH (Mato Grosso) and LL (Paraná) only.
+
+![Choropleth small-multiples — mean annual incidence per disease](figures/spat01_choropleth_facet.png)
+
+![LISA cluster categories — faceted by disease](figures/spat02_lisa_facet.png)
 
 ---
 
@@ -137,6 +145,8 @@ Per-state and lagged specifications are also exported (see `outputs/glm_*_per_st
 
 Per-state breakdowns (in `outputs/glm_negbin_per_state.csv`) show 15/27 states with significant temperature effect for Chikungunya and 18/27 for Dengue and Zika; rain effects are significant in 6–11/27 states depending on disease.
 
+![Per-state temperature IRR caterpillar (NegBin), sorted; faded if non-significant](figures/glm02_caterpillar_temp_irr.png)
+
 ---
 
 ## 7. Methodological notes
@@ -151,7 +161,7 @@ Per-state breakdowns (in `outputs/glm_negbin_per_state.csv`) show 15/27 states w
 
 ## 8. Output files
 
-### Generated artefacts (35 in `outputs/`, 11 in `figures/`)
+### Generated artefacts (35 in `outputs/`, 16 in `figures/`)
 
 **Statistical tables**
 
@@ -175,6 +185,12 @@ Per-state breakdowns (in `outputs/glm_negbin_per_state.csv`) show 15/27 states w
 **Composite figures** (`figures/Figure*.png`, 11 files) — publication-ready panels.
 Figure 6 (maps) is split into four standalone figures: `Figure6a_choropleth_mean`,
 `Figure6b_jenks_classification`, `Figure6c_temporal_maps`, `Figure6d_lisa_trend`.
+
+**Alternative views** (`figures/trend0*`, `figures/spat0*`, `figures/glm02_*`) — five
+selected alternative encodings of the main findings (slope chart, Sen-slope
+dot-and-bar, faceted choropleth, faceted LISA map, per-state IRR caterpillar).
+Regenerate with `python3 pipelines/alt_results.py`. See `alt_results/README.md`
+for the mapping between each alternative and the original it pairs with.
 
 ---
 
