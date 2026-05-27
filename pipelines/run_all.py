@@ -40,7 +40,8 @@ def main():
     if failed:
         print(f"  Failed: {failed}")
     print(f"{'='*70}")
+    return 1 if failed else 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
