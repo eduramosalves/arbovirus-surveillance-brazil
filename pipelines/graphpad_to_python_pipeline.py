@@ -37,7 +37,7 @@ from matplotlib.colors import LinearSegmentedColormap
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
 _HERE      = os.path.dirname(os.path.abspath(__file__))
-INPUT_DIR  = os.path.join(_HERE, "data", "graphpad_data")
+INPUT_DIR  = os.path.join(_HERE, "db", "graphpad_data")
 OUTPUT_DIR = os.path.join(_HERE, "outputs")  # normalized_results/outputs
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 

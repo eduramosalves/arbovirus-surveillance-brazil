@@ -135,6 +135,30 @@ def fit_negbin(formula, data):
         return m, 1.0
 
 
+def negbin_dispersion(m, alpha):
+    """Pearson chi2 / df_resid for an NB2 fit (analogue to GLM dispersion).
+
+    Works for both the discrete NegativeBinomial result and the GLM fallback.
+    Under correct NB2 specification this ratio should be ~1; large departures
+    flag remaining mis-fit beyond what alpha absorbs.
+    """
+    try:
+        if hasattr(m, "pearson_chi2") and hasattr(m, "df_resid") and m.df_resid:
+            return float(m.pearson_chi2) / float(m.df_resid)
+        mu = np.asarray(m.predict())
+        y  = np.asarray(m.model.endog, dtype=float)
+        var = mu + alpha * mu**2
+        var = np.where(var > 0, var, np.nan)
+        pearson = float(np.nansum((y - mu)**2 / var))
+        # Discrete NB params include 'alpha'; subtract it so df_resid matches
+        # the GLM convention (residual df relative to mean-model parameters).
+        n_mean_params = sum(1 for k in m.params.index if k != "alpha")
+        df_resid = len(y) - n_mean_params
+        return pearson / df_resid if df_resid > 0 else np.nan
+    except Exception:
+        return np.nan
+
+
 def run_models(model_family):
     """Run all three model specifications for the given family.
     model_family ∈ {"poisson", "quasi-poisson", "negbin"}
@@ -156,16 +180,17 @@ def run_models(model_family):
                 if model_family == "poisson":
                     m, _ = fit_poisson("Cases ~ Temp_Avg + Rain_mm", sub)
                     scale = None
-                    aux = {"dispersion": float(m.pearson_chi2/m.df_resid) if m.df_resid>0 else np.nan,
-                           "alpha": np.nan}
+                    disp = float(m.pearson_chi2/m.df_resid) if m.df_resid>0 else np.nan
+                    aux = {"dispersion": disp, "alpha": np.nan, "overdispersion": disp}
                 elif model_family == "quasi-poisson":
                     m, disp = fit_poisson("Cases ~ Temp_Avg + Rain_mm", sub, quasi=True)
                     scale = disp
-                    aux = {"dispersion": disp, "alpha": np.nan}
+                    aux = {"dispersion": disp, "alpha": np.nan, "overdispersion": disp}
                 elif model_family == "negbin":
                     m, alpha = fit_negbin("Cases ~ Temp_Avg + Rain_mm", sub)
                     scale = None
-                    aux = {"dispersion": np.nan, "alpha": alpha}
+                    disp = negbin_dispersion(m, alpha)
+                    aux = {"dispersion": disp, "alpha": alpha, "overdispersion": alpha}
                 else:
                     raise ValueError(model_family)
                 coefs = _summarize(m, model_family, scale=scale)
@@ -203,16 +228,17 @@ def run_models(model_family):
                 if model_family == "poisson":
                     m, _ = fit_poisson(formula_lagged, sub)
                     scale = None
-                    aux = {"dispersion": float(m.pearson_chi2/m.df_resid) if m.df_resid>0 else np.nan,
-                           "alpha": np.nan}
+                    disp = float(m.pearson_chi2/m.df_resid) if m.df_resid>0 else np.nan
+                    aux = {"dispersion": disp, "alpha": np.nan, "overdispersion": disp}
                 elif model_family == "quasi-poisson":
                     m, disp = fit_poisson(formula_lagged, sub, quasi=True)
                     scale = disp
-                    aux = {"dispersion": disp, "alpha": np.nan}
+                    aux = {"dispersion": disp, "alpha": np.nan, "overdispersion": disp}
                 elif model_family == "negbin":
                     m, alpha = fit_negbin(formula_lagged, sub)
                     scale = None
-                    aux = {"dispersion": np.nan, "alpha": alpha}
+                    disp = negbin_dispersion(m, alpha)
+                    aux = {"dispersion": disp, "alpha": alpha, "overdispersion": alpha}
                 coefs = _summarize(m, model_family, scale=scale)
                 for r in coefs:
                     r.update({"Virus": virus, "Location_Name": uf,
@@ -246,16 +272,17 @@ def run_models(model_family):
             if model_family == "poisson":
                 m, _ = fit_poisson(formula_fe, sub)
                 scale = None
-                aux = {"dispersion": float(m.pearson_chi2/m.df_resid) if m.df_resid>0 else np.nan,
-                       "alpha": np.nan}
+                disp = float(m.pearson_chi2/m.df_resid) if m.df_resid>0 else np.nan
+                aux = {"dispersion": disp, "alpha": np.nan, "overdispersion": disp}
             elif model_family == "quasi-poisson":
                 m, disp = fit_poisson(formula_fe, sub, quasi=True)
                 scale = disp
-                aux = {"dispersion": disp, "alpha": np.nan}
+                aux = {"dispersion": disp, "alpha": np.nan, "overdispersion": disp}
             elif model_family == "negbin":
                 m, alpha = fit_negbin(formula_fe, sub)
                 scale = None
-                aux = {"dispersion": np.nan, "alpha": alpha}
+                disp = negbin_dispersion(m, alpha)
+                aux = {"dispersion": disp, "alpha": alpha, "overdispersion": alpha}
             coefs = _summarize(m, model_family, scale=scale)
             for r in coefs:
                 r.update({"Virus": virus, "Location_Name": "ALL",
